@@ -71,44 +71,44 @@ jobs:
         echo "CangKu=${Apidz##*/}" >> $GITHUB_ENV
         echo "Modelfile=${{matrix.target}}" >> $GITHUB_ENV 
 
-    - name: 公 告
-      run: |
-        echo
-        git clone --depth 1 -b main https://github.com/281677160/common build/common > /dev/null 2>&1
-        chmod -R +x "${GITHUB_WORKSPACE}/build/common"
-        if [[ "${Modelfile}" == "openwrt_amlogic" ]]; then
-          echo "ZZZ=package/lean/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
-          echo "CODE=amlogic" >> $GITHUB_ENV
-          echo "OpenWrt_name=18.06" >> $GITHUB_ENV
-        elif [[ "${REPO_BRANCH}" == "master" ]]; then
-          echo "ZZZ=package/lean/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
-          echo "CODE=Lede" >> $GITHUB_ENV
-          echo "OpenWrt_name=18.06" >> $GITHUB_ENV
-        elif [[ "${REPO_BRANCH}" == "19.07" ]]; then
-          echo "ZZZ=package/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
-          echo "CODE=Lienol" >> $GITHUB_ENV
-          echo "OpenWrt_name=19.07" >> $GITHUB_ENV
-        elif [[ "${REPO_BRANCH}" == "openwrt-18.06" ]]; then
-          echo "ZZZ=package/emortal/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
-          echo "CODE=Tianling" >> $GITHUB_ENV
-          echo "OpenWrt_name=tl-18.06" >> $GITHUB_ENV
-        elif [[ "${REPO_BRANCH}" == "openwrt-21.02" ]]; then
-          echo "ZZZ=package/emortal/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
-          echo "CODE=Mortal" >> $GITHUB_ENV
-          echo "OpenWrt_name=21.02" >> $GITHUB_ENV
-        fi
-        echo "NETIP=package/base-files/files/etc/networkip" >> $GITHUB_ENV
-        echo "DELETE=package/base-files/files/etc/deletefile" >> $GITHUB_ENV
-        source build/common/common.sh && Diy_gonggao
+   # - name: 公 告
+   #   run: |
+   #     echo
+   #     git clone --depth 1 -b main https://github.com/281677160/common build/common > /dev/null 2>&1
+   #     chmod -R +x "${GITHUB_WORKSPACE}/build/common"
+   #     if [[ "${Modelfile}" == "openwrt_amlogic" ]]; then
+   #       echo "ZZZ=package/lean/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
+   #       echo "CODE=amlogic" >> $GITHUB_ENV
+   #       echo "OpenWrt_name=18.06" >> $GITHUB_ENV
+   #     elif [[ "${REPO_BRANCH}" == "master" ]]; then
+   #       echo "ZZZ=package/lean/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
+   #       echo "CODE=Lede" >> $GITHUB_ENV
+   #       echo "OpenWrt_name=18.06" >> $GITHUB_ENV
+   #     elif [[ "${REPO_BRANCH}" == "19.07" ]]; then
+   #       echo "ZZZ=package/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
+   #       echo "CODE=Lienol" >> $GITHUB_ENV
+   #       echo "OpenWrt_name=19.07" >> $GITHUB_ENV
+   #     elif [[ "${REPO_BRANCH}" == "openwrt-18.06" ]]; then
+   #       echo "ZZZ=package/emortal/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
+   #       echo "CODE=Tianling" >> $GITHUB_ENV
+   #       echo "OpenWrt_name=tl-18.06" >> $GITHUB_ENV
+   #     elif [[ "${REPO_BRANCH}" == "openwrt-21.02" ]]; then
+   #       echo "ZZZ=package/emortal/default-settings/files/zzz-default-settings" >> $GITHUB_ENV
+   #       echo "CODE=Mortal" >> $GITHUB_ENV
+   #       echo "OpenWrt_name=21.02" >> $GITHUB_ENV
+   #     fi
+   #     echo "NETIP=package/base-files/files/etc/networkip" >> $GITHUB_ENV
+   #     echo "DELETE=package/base-files/files/etc/deletefile" >> $GITHUB_ENV
+   #    source build/common/common.sh && Diy_gonggao
 
-    - name: 电报机器人或pushplus信息通知
-      if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TELE'
-      run: |
-        if [[ "${SERVERCHAN_SCKEY}" == "TELE" ]]; then
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：您正在使用【${{matrix.target}}】文件夹编译固件中(${{env.CangKu}}仓库的#${{env.Run_number}}号),请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
-        elif [[ "${SERVERCHAN_SCKEY}" == "PUSH" ]]; then
-          curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人：您正在使用【${{matrix.target}}】文件夹编译固件中(${{env.CangKu}}仓库的#${{env.Run_number}}号),请耐心等待...... 😋💐" "http://www.pushplus.plus/send"
-        fi
+   # - name: 电报机器人或pushplus信息通知
+   #   if: env.PUSH_PLUS_TOKEN && env.SERVERCHAN_SCKEY == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.SERVERCHAN_SCKEY == 'TELE'
+   #   run: |
+   #     if [[ "${SERVERCHAN_SCKEY}" == "TELE" ]]; then
+   #       curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：您正在使用【${{matrix.target}}】文件夹编译固件中(${{env.CangKu}}仓库的#${{env.Run_number}}号),请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+   #     elif [[ "${SERVERCHAN_SCKEY}" == "PUSH" ]]; then
+   #       curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人：您正在使用【${{matrix.target}}】文件夹编译固件中(${{env.CangKu}}仓库的#${{env.Run_number}}号),请耐心等待...... 😋💐" "http://www.pushplus.plus/send"
+   #     fi
 
     - name: 部署编译环境
       env:
